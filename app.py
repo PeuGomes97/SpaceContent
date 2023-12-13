@@ -26,6 +26,7 @@ connect_db(app)
 
 @app.route("/")
 def homepage():
+    """If logged redirects user for show page or to register"""
     if "user_id" in session:
         return redirect(f"/users/{session['user_id']}")
     else:
@@ -34,6 +35,7 @@ def homepage():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
+    """Register User"""
     if "user_id" in session:
         return redirect(f"/users/{session['user_id']}")
     else:
@@ -45,7 +47,7 @@ def register():
         first_name = form.first_name.data
         last_name = form.last_name.data
         email = form.email.data
-
+# Add it to DB
         user = User.register(username, password, first_name, last_name, email)
 
         db.session.add(user)
@@ -61,6 +63,7 @@ def register():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    """Redirects to show page or to login form"""
     if "user_id" in session:
         return redirect(f"/users/{session['user_id']}")
     
@@ -84,6 +87,7 @@ def login():
 
 @app.route("/logout")
 def logout():
+    """Clears username and user_id from session storage"""
     session.pop("username", None)
     session.pop("user_id", None)
     return redirect("/login")
@@ -91,6 +95,7 @@ def logout():
 
 @app.route("/users/<int:user_id>")
 def show_user(user_id):
+    """Main route where users can choose which feature from webapp to check"""
     if "user_id" not in session or session["user_id"] != user_id:
         flash("Unauthorized. Please log in.")
         return redirect("/login")
@@ -101,6 +106,7 @@ def show_user(user_id):
 
 @app.route("/users/<int:user_id>/result/apod", methods=['GET', 'POST'])
 def result_for_apod(user_id):
+    """APOD Route with default image and form to query based on users preference"""
     if "username" not in session or user_id != session['user_id']:
         flash("Unauthorized. Please log in.")
         return redirect("/login")
@@ -148,6 +154,7 @@ def result_for_apod(user_id):
 
 @app.route("/users/<int:user_id>/mars_photos", methods=['GET', 'POST'])
 def mars_photos(user_id):
+    """Mars Rover Route with default image and form to query based on users preference"""
     if "username" not in session or user_id != session['user_id']:
         flash("Unauthorized. Please log in.")
         return redirect("/login")
@@ -156,9 +163,10 @@ def mars_photos(user_id):
     message = None
     default_date = "2023-12-01"
 
-    if request.method == 'POST' and form.validate_on_submit():
+# Handles form for different params on api request 
+    if request.method == 'POST':
         camera = form.cameras.data
-        date = form.date.data
+        date = form.date.data if form.date.data else default_date
 
         params = {
             'api_key': API_KEY,
@@ -166,15 +174,13 @@ def mars_photos(user_id):
             'camera': camera
         }
 
-        params = {k: v for k, v in params.items() if v is not None}
- 
         res = requests.get(MARSROVER_API_URL, params=params)
 
         data = res.json() if res.status_code == 200 else None
         if data is None:
             message = "No data found for that date!"
         else:    
-            photos = data['photos']
+            photos = data.get('photos', [])
             photos = photos[:10]
             images_info = [{'img_src': photo['img_src'], 'rover_name': photo['rover']['name'], 'camera': photo['camera']['name'], 'date': photo['earth_date']} for photo in photos]
 
@@ -186,6 +192,7 @@ def mars_photos(user_id):
 
         return render_template("/users/marsrover.html", form=form, images_info=images_info, message=message, favorited_images=favorited_images)
     
+    # Default api request for the route
     if request.method == 'GET':
         params = {
             'api_key': API_KEY,
@@ -224,9 +231,8 @@ def list_favorites(user_id):
     favorite_ids = []  # Lista para armazenar os IDs dos favoritos
     if user.favorites:
         favorite_images = [fav.image_url for fav in user.favorites]
-        favorite_ids = [fav.id for fav in user.favorites]  # Recupera os IDs dos favoritos
-    else:
-        flash("No Favorites added yet!")
+        favorite_ids = [fav.id for fav in user.favorites]  # Retrive favorite's id
+  
 
     return render_template("favorites.html", favorite_images=favorite_images, favorite_ids=favorite_ids)
 
@@ -236,6 +242,7 @@ def list_favorites(user_id):
 
 @app.route("/users/<int:user_id>/favorites/<int:favorite_id>", methods=['DELETE'])
 def delete_favorite(user_id, favorite_id):
+    """Route to handle delete methods from favorites list from user"""
     if "user_id" not in session or user_id != session['user_id']:
         flash("Unauthorized. Please log in.")
         return redirect("/login")
@@ -245,12 +252,13 @@ def delete_favorite(user_id, favorite_id):
     db.session.delete(favorite_to_delete)
     db.session.commit()
 
-    return jsonify({"message": "Favorito removido com sucesso!"}), 200
+    return jsonify({"message": "Favorite removed succesfully!"}), 200
 
 
 
 @app.route("/users/<int:user_id>/add_to_favorites", methods=['POST'])
 def add_to_favorites(user_id):
+    """Route to handle favorite image add to database and user's list"""
     if "username" not in session or user_id != session['user_id']:
         flash("Unauthorized. Please log in.")
         return redirect("/login")

@@ -2,6 +2,7 @@
 {% block title %}Mars Rover{% endblock %}
 
 {% block content %}
+
 <form method="POST" class="mb-3">
     {{ form.hidden_tag() }}
     
@@ -35,6 +36,7 @@
 
 
 
+
 <br>
 {% if images_info %}
 <div id="carouselExampleCaptions" class="carousel slide mb-5 w-75 mx-auto" data-bs-ride="carousel">
@@ -50,7 +52,7 @@
                 <div class="carousel-caption d-none d-md-block">
                     <h5>{{ info['rover_name'] }}</h5>
                     <p>{{ info['date'] }} - Camera: {{ info['camera'] }}</p>
-                    <!-- Botão de adicionar aos favoritos -->
+                    <!-- Button to add to favorites -->
                     {% if info['img_src'] not in favorited_images %}
                         <form method="POST" action="{{ url_for('add_to_favorites', user_id=session['user_id']) }}" onsubmit="return addToFavorites(event, '{{ info['img_src'] }}', '{{ loop.index }}')">
                             <input type="hidden" name="image_url" value="{{ info['img_src'] }}">
@@ -84,7 +86,7 @@
                 <div class="carousel-caption d-none d-md-block">
                     <h5>{{ rover }}</h5>
                     <p>{{ date }} - Camera: {{ camera }}</p>
-                    <!-- Botão de adicionar aos favoritos -->
+                    <!-- Button to add to favorites -->
                     {% if image not in favorited_images %}
                         <form method="POST" action="{{ url_for('add_to_favorites', user_id=session['user_id']) }}" onsubmit="return addToFavorites(event, '{{ image }}', 'single')">
                             <input type="hidden" name="image_url" value="{{ image }}">
@@ -103,7 +105,9 @@
 
 
 {% if message %}
-{{ message }}
+<spam class="label-white">
+    {{ message }}
+</spam>
 {% endif %}
 </div>
 
@@ -139,8 +143,7 @@ return false;
     document.addEventListener('DOMContentLoaded', function() {
         var myCarousel = document.getElementById('carouselExampleCaptions');
         var carousel = new bootstrap.Carousel(myCarousel, {
-            interval: 7000, // Defina o intervalo entre slides se desejar
-            // Outras opções do carousel podem ser configuradas aqui
+            interval: 7000, 
         });
 
         var prevButton = document.querySelector('.carousel-control-prev');

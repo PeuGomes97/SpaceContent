@@ -43,7 +43,7 @@ class RegisterForm(FlaskForm):
 
 
 class MarsRoverForm(FlaskForm):
-    """Choose a camera type to filter images"""
+    """Choose a camera type to filter images for Mars Rover feature"""
     
     cameras = SelectMultipleField('Choose Cameras',
                                   choices=[('FHAZ', 'Front Hazard Avoidance Camera'),
@@ -67,6 +67,7 @@ class MarsRoverForm(FlaskForm):
 
 
 class SearchAPODForm(FlaskForm):
+    """Params(filter) for APOD request"""
     
     date = DateField(
         'Date', validators=[Optional()]

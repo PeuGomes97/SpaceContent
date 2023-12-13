@@ -65,6 +65,7 @@ class User(db.Model):
         
 
 class Favorite(db.Model):
+    """Favorited images for users"""
     
     __tablename__ = 'favorites'
 
