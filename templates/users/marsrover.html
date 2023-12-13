@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+{% block title %}Mars Rover{% endblock %}
+
+{% block content %}
+<form method="POST" class="mb-3">
+    {{ form.hidden_tag() }}
+    
+    <div class="row align-items-center justify-content-center mb-3">
+        <div class="col-auto">
+            <label for="date" class="col-form-label label-white">EARTH DATE:</label>
+        </div>
+        <div class="col-auto">
+            <input type="date" class="form-control" id="date" name="date" placeholder="Date">
+        </div>
+        <div class="col-auto">
+            <label for="cameras" class="col-form-label label-white">CAMERA:</label>
+        </div>
+        <div class="col-auto">
+            <select class="form-select" id="cameras" name="cameras">
+                <option selected>Choose a camera</option>
+                {% for value, label in form.cameras.choices %}
+                    <option value="{{ value }}">{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+        <div class="col-auto">
+            <a href="{{ url_for('mars_photos', user_id=session['user_id']) }}" class="btn btn-secondary">Clear Search</a>
+        </div>
+    </div>
+</form>
+
+
+
+
+<br>
+{% if images_info %}
+<div id="carouselExampleCaptions" class="carousel slide mb-5 w-75 mx-auto" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+        {% for info in images_info %}
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="{{ loop.index0 }}" {% if loop.first %}class="active" aria-current="true"{% endif %} aria-label="Slide {{ loop.index }}"></button>
+        {% endfor %}
+    </div>
+    <div class="carousel-inner">
+        {% for info in images_info %}
+            <div class="carousel-item {% if loop.first %}active{% endif %}">
+                <img src="{{ info['img_src'] }}" class="d-block w-100 max-height-500" alt="Mars Rover Image">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>{{ info['rover_name'] }}</h5>
+                    <p>{{ info['date'] }} - Camera: {{ info['camera'] }}</p>
+                    <!-- Botão de adicionar aos favoritos -->
+                    {% if info['img_src'] not in favorited_images %}
+                        <form method="POST" action="{{ url_for('add_to_favorites', user_id=session['user_id']) }}" onsubmit="return addToFavorites(event, '{{ info['img_src'] }}', '{{ loop.index }}')">
+                            <input type="hidden" name="image_url" value="{{ info['img_src'] }}">
+                            <button type="submit" class="btn btn-secondary">Add to Favorites</button>
+                            <span id="added-to-favorites-message-{{ loop.index }}" style="display: none;">Favorited</span>
+                        </form>
+                    {% else %}
+                        <span class="label-white">Already in Favorites</span>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+{% endif %}
+
+{% if not images_info %}
+{% if date and image and rover and camera %}
+    <div id="carouselExampleCaptions" class="carousel slide mb-5 w-75 mx-auto" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="{{ image }}" class="d-block w-100 max-height-500" alt="Mars Rover Image">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>{{ rover }}</h5>
+                    <p>{{ date }} - Camera: {{ camera }}</p>
+                    <!-- Botão de adicionar aos favoritos -->
+                    {% if image not in favorited_images %}
+                        <form method="POST" action="{{ url_for('add_to_favorites', user_id=session['user_id']) }}" onsubmit="return addToFavorites(event, '{{ image }}', 'single')">
+                            <input type="hidden" name="image_url" value="{{ image }}">
+                            <button type="submit" class="btn btn-secondary">Add to Favorites</button>
+                            <span id="added-to-favorites-message-single" style="display: none;">Favorited</span>
+                        </form>
+                    {% else %}
+                        <span class="label-white">Already in Favorites</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+{% endif %}
+
+
+{% if message %}
+{{ message }}
+{% endif %}
+</div>
+
+<script>
+function addToFavorites(event, imgSrc, index) {
+event.preventDefault();
+
+var button = event.target.querySelector('button[type="submit"]');
+var successMessage;
+
+if (index === 'single') {
+    successMessage = document.getElementById('added-to-favorites-message-single');
+} else {
+    successMessage = event.target.querySelector(`#added-to-favorites-message-${index}`);
+}
+
+fetch(event.target.action, {
+    method: 'POST',
+    body: new FormData(event.target)
+}).then(response => {
+    if (response.ok) {
+        button.style.display = 'none';
+        successMessage.style.display = 'inline';
+    }
+}).catch(error => {
+    console.error('Erro:', error);
+});
+
+return false;
+}
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var myCarousel = document.getElementById('carouselExampleCaptions');
+        var carousel = new bootstrap.Carousel(myCarousel, {
+            interval: 7000, // Defina o intervalo entre slides se desejar
+            // Outras opções do carousel podem ser configuradas aqui
+        });
+
+        var prevButton = document.querySelector('.carousel-control-prev');
+        var nextButton = document.querySelector('.carousel-control-next');
+
+        prevButton.addEventListener('click', function() {
+            carousel.prev();
+        });
+
+        nextButton.addEventListener('click', function() {
+            carousel.next();
+        });
+
+        prevButton.onclick = function() {
+            carousel.prev();
+        };
+
+        nextButton.onclick = function() {
+            carousel.next();
+        };
+    });
+
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+{% block title %}APOD{% endblock %}
+
+{% block content %}
+<!-- <form method='POST'>
+    {{ form.hidden_tag() }}
+
+    <div class="form-group row">
+        {{ form.count.label(class="col-sm-2 col-form-label", for="count") }}
+        <div class="col-sm-10">
+            {{ form.count(id="count", class="form-control") }}
+        </div>
+    </div>
+
+    <div class="form-group row">
+        {{ form.date.label(class="col-sm-2 col-form-label", for="date") }}
+        <div class="col-sm-10">
+            {{ form.date(id="date", class="form-control") }}
+        </div>
+    </div>
+
+    <div class="form-group row">
+        {{ form.start_date.label(class="col-sm-2 col-form-label", for="start_date") }}
+        <div class="col-sm-10">
+            {{ form.start_date(id="start_date", class="form-control") }}
+        </div>
+    </div>
+
+    <div class="form-group row">
+        {{ form.end_date.label(class="col-sm-2 col-form-label", for="end_date") }}
+        <div class="col-sm-10">
+            {{ form.end_date(id="end_date", class="form-control") }}
+        </div>
+    </div>
+
+    <button>Search</button>
+</form> -->
+
+<form method='POST' class="mb-3">
+    {{ form.hidden_tag() }}
+
+    <div class="row align-items-center justify-content-center mb-3">
+        <div class="col-auto">
+            {{ form.count.label(class="col-form-label label-white") }}
+        </div>
+        <div class="col-auto">
+            {{ form.count(id="count", class="form-control") }}
+        </div>
+        <div class="col-auto">
+            {{ form.date.label(class="col-form-label label-white") }}
+        </div>
+        <div class="col-auto">
+            {{ form.date(id="date", class="form-control") }}
+        </div>
+        <div class="col-auto">
+            {{ form.start_date.label(class="col-form-label label-white") }}
+        </div>
+        <div class="col-auto">
+            {{ form.start_date(id="start_date", class="form-control") }}
+        </div>
+        <div class="col-auto">
+            {{ form.end_date.label(class="col-form-label label-white") }}
+        </div>
+        <div class="col-auto">
+            {{ form.end_date(id="end_date", class="form-control") }}
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>     
+    </div>
+    <a href="{{ url_for('result_for_apod', user_id=session['user_id']) }}" class="btn btn-secondary">Clear Search</a>
+</form>
+
+
+<br>
+
+{% if images_info %}
+<div id="carouselExampleCaptions" class="carousel slide mb-5 w-75 mx-auto" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+        {% for info in images_info %}
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="{{ loop.index0 }}" {% if loop.first %}class="active" aria-current="true"{% endif %} aria-label="Slide {{ loop.index }}"></button>
+        {% endfor %}
+    </div>
+    <div class="carousel-inner">
+        {% for info in images_info %}
+            <div class="carousel-item {% if loop.first %}active{% endif %}">
+                <img src="{{ info['url'] }}" class="d-block w-100 max-height-500" alt="Imagem da NASA">
+                <div class="carousel-caption d-none d-md-block">
+                    <h3>{{ info['title'] }}</h3>
+                    <p>Date: {{ info['date'] }}</p>
+                    <p>{{ info['explanation'] }}</p>
+                    <!-- Botão de adicionar aos favoritos -->
+                    {% if info['url'] not in favorited_images %}
+                        <form method="POST" action="{{ url_for('add_to_favorites', user_id=session['user_id']) }}" onsubmit="return addToFavorites(event, '{{ info['url'] }}', '{{ loop.index }}')">
+                            <input type="hidden" name="image_url" value="{{ info['url'] }}">
+                            <button type="submit" class="btn btn-secondary" id="add-to-favorites-{{ loop.index }}">Add to Favorites</button>
+                            <span id="added-to-favorites-message-{{ loop.index }}" style="display: none;">Adicionado aos Favoritos!</span>
+                        </form>
+                    {% else %}
+                        <span>Already in Favorites</span>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+{% endif %}
+
+{% if data %}
+<div id="carouselData" class="carousel slide mb-5 w-75 mx-auto" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselData" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+    </div>
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="{{ data.url }}" class="d-block w-100 max-height-500" alt="Imagem da NASA">
+            <div class="carousel-caption d-none d-md-block">
+                <h3>{{ data.title }}</h3>
+                <p>Date: {{ data.date }}</p>
+                <p>{{ data.explanation }}</p>
+                <!-- Botão de adicionar aos favoritos -->
+                {% if data.url not in favorited_images %}
+                    <form method="POST" action="{{ url_for('add_to_favorites', user_id=session['user_id']) }}" onsubmit="return addToFavorites(event, '{{ data.url }}', 'single')">
+                        <input type="hidden" name="image_url" value="{{ data.url }}">
+                        <button type="submit">Add to Favorites</button>
+                        <span id="added-to-favorites-message-single" style="display: none;">Adicionado aos Favoritos!</span>
+                    </form>
+                {% else %}
+                    <span>Already in Favorites</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselData" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselData" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+{% endif %}
+
+
+
+{% if message %}
+    {{ message }}
+{% endif %}
+
+
+<script>
+    function addToFavorites(event, imgSrc, index) {
+        event.preventDefault();
+
+        var button = event.target.querySelector('button[type="submit"]');
+        var successMessage;
+
+        if (index === 'single') {
+            successMessage = document.getElementById('added-to-favorites-message-single');
+        } else {
+            successMessage = event.target.querySelector(`#added-to-favorites-message-${index}`);
+        }
+
+        fetch(event.target.action, {
+            method: 'POST',
+            body: new FormData(event.target)
+        }).then(response => {
+            if (response.ok) {
+                button.style.display = 'none';
+                successMessage.style.display = 'inline';
+            }
+        }).catch(error => {
+            console.error('Erro:', error);
+        });
+
+        return false;
+    }
+</script>
+{% endblock %}

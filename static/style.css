@@ -1,0 +1,57 @@
+/* style.css */
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* style.css */
+
+body {
+    /* Defina as cores do gradiente ou use cores hexadecimais, lineares, etc. */
+    background: linear-gradient(120deg, #37363f, rgb(76, 58, 108));
+    /* Defina outras propriedades de fundo conforme necessário */
+    /* background-size:  100vw 100vh; */
+    background-image: url("https://wallpapers.com/images/hd/planet-mars-amoled-photo-tc5a1gjk2ur9kutv.webp");
+    background-size: cover; /* Ou background-size: 100%; */
+    background-repeat: no-repeat
+    /* Importante! Impedir a repetição do gradiente */
+    /* background-repeat: initial; */
+    /* min-height: 100vh; */
+}
+
+h1 {
+color: aliceblue;
+
+}
+
+.max-height-500 {
+    max-height: 700px; /* Define a altura máxima das imagens em 500 pixels */
+    width: auto; /* Mantém a largura proporcional à altura definida */
+    object-fit: contain; /* Ajusta a imagem ao contêiner, mantendo sua proporção */
+}
+
+
+.img-marsrover {
+    max-width: 50%; /* Redimensiona a imagem para se ajustar à largura máxima da div */
+    height: auto; /* Mantém a proporção da imagem */
+    display: block; /* Remove espaço extra abaixo da imagem */
+}
+
+/* Seu arquivo CSS */
+.label-white {
+    color: white; /* Define a cor do texto como branco */
+}
+
+
+.content-over-image {
+    position: relative;
+    z-index: 1; /* Para garantir que o conteúdo fique acima da imagem de fundo */
+    padding-top: 50px; /* Ajuste o espaçamento do topo conforme necessário */
+}
+
+.custom-font-style {
+    font-size: 24px; /* Ajuste o tamanho da fonte conforme necessário */
+    font-weight: bold; /* Ajuste a espessura da fonte conforme necessário */
+}
+

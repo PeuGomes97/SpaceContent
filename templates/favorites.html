@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block title %}FAVORITES{% endblock %}
+
+{% block content %}
+
+<h1 class="mb-5" style="text-align: center;">Favorites</h1>
+
+{% if favorite_images %}
+<div id="favorites-carousel" class="carousel slide mb-5 w-75 mx-auto" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+        {% for index in range(favorite_images|length) %}
+            <button type="button" data-bs-target="#favorites-carousel" data-bs-slide-to="{{ index }}" {% if loop.first %}class="active" aria-current="true"{% endif %} aria-label="Slide {{ index + 1 }}"></button>
+        {% endfor %}
+    </div>
+    <div class="carousel-inner">
+        {% for index in range(favorite_images|length) %}
+            <div class="carousel-item {% if loop.first %}active{% endif %}">
+                <img src="{{ favorite_images[index] }}" class="d-block w-100" style="object-fit: cover; max-height: 500px;" alt="Favorite Image">
+                <div class="carousel-caption d-none d-md-block">
+                    <button class="btn btn-secondary delete-btn" data-favorite-id="{{ favorite_ids[index] }}" data-index="{{ index }}">Delete</button>
+                    <span id="removed-from-favorites-message-{{ index }}" style="display: none;">Removed!</span>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#favorites-carousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#favorites-carousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+{% else %}
+<p class="label-white">NO FAVORITES ADDED YET.</p>
+{% endif %}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const deleteButtons = document.querySelectorAll('.delete-btn');
+        
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const favoriteId = this.getAttribute('data-favorite-id');
+                const path = window.location.pathname.split("users/");
+                const user_id = path[1][0];
+
+                // Fazer uma requisição DELETE para remover o favorito
+                fetch(`/users/${user_id}/favorites/${favoriteId}`, {
+                    method: 'DELETE'
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // Ocultar a imagem do carousel visualmente
+                        const index = this.getAttribute('data-index');
+                        const image = document.querySelector(`#favorites-carousel .carousel-item:nth-child(${parseInt(index) + 1}) img`);
+                        image.style.display = 'none';
+
+                        // Mostrar a mensagem de remoção dos favoritos
+                        const removedMessage = document.getElementById(`removed-from-favorites-message-${index}`);
+                        removedMessage.style.display = 'block';
+                    }
+                })
+                .catch(error => console.error('Erro ao deletar favorito:', error));
+            });
+        });
+    });
+</script>
+
+{% endblock %}
+
+
+
+

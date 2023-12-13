@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Create User
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+  <h1 class="text-center">Login a user</h1>
+  <form method="POST" class="mx-auto">
+    {{ form.hidden_tag() }}
+
+    {% for field in form.errors %}
+      <div class="alert alert-danger">{{ field }}:
+        <ul>
+          {% for error in form.errors[field] %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endfor %}
+
+    <div class="container py-3 mb-4 d-flex flex-column align-items-center">
+      <div class="mb-3 row">
+        <label for="username" class="col-sm-3 col-form-label text-end label-white mt-2">Username</label>
+        <div class="col-sm-6">
+          <input type="text" name="username" id="username" class="form-control-lg">
+        </div>
+      </div>
+
+      <div class="mb-3 row">
+        <label for="password" class="col-sm-3 col-form-label text-end label-white mt-2">Password</label>
+        <div class="col-sm-6">
+          <input type="password" name="password" id="password" class="form-control-lg">
+        </div>
+      </div>
+
+      <div class="mb-3 row">
+        <div class="col-sm-9 offset-sm-3">
+          <button class="btn btn-secondary ">Login!</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

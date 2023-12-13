@@ -1,0 +1,36 @@
+
+{% extends 'base.html' %}
+{% block title %}MENU{% endblock %}
+
+{% block content %}
+
+
+<div class="container text-center">
+    <h1>Welcome to Space Content, your cosmic gateway to the universe!</h1>
+    <hr>
+    <div class="row justify-content-md-center">
+        <div class="col col-md-6">
+            <p class="label-white mt-3" style="text-align: justify;">Embark on an interstellar journey with our two stellar features:
+                Astronomy Picture of the Day (APOD): Explore the wonders of the cosmos by delving into the Astronomy Picture of the Day, courtesy of NASA. Witness breathtaking celestial marvels and immerse yourself in the beauty of the universe. With options to filter by date range or count, discover the awe-inspiring snapshots captured across the vastness of space.</p>
+                <p class="label-white mt-3" style="text-align: justify;">Mars Rover Photo Gallery: Step foot on the red planet through the lens of the Mars Rover! Dive into an archive of photos captured by the rover's cameras. Filter through historical moments on Mars by date and camera type, and behold the panoramic landscapes and enigmatic discoveries made on this neighboring world.
+                Join us in uncovering the mysteries, beauty, and discoveries that await among the stars and on the enigmatic Martian surface!</p>
+        </div>
+        <div class="col col-md-6 d-flex align-items-center justify-content-center">
+            <div class="container text-center position-relative">
+                <div class="position-absolute top-50 start-50 translate-middle">
+                    <!-- <a href="{{url_for('mars_photos', user_id=user.id)}}" class="img-marsrover">
+                        <img src="https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04028/opgs/edr/ncam/NLB_755082157EDR_F1050490NCAM00312M_.JPG" alt="Descrição da imagem" width="200" height="200">
+                    </a> -->
+                    <a href="{{ url_for('result_for_apod', user_id=user.id) }}" class="btn btn-secondary my-4 d-block">Astronomy Picture of the Day</a>
+                    <a href="{{ url_for('mars_photos', user_id=user.id) }}" class="btn btn-secondary my-4 d-block">Mars Rover Pictures</a>
+                </div>
+            </div>
+        </div>
+        
+        
+</div>
+
+<footer class="footer text-center py-2 fixed-bottom bg-dark text-white">
+    <p class="m-0">Images provided by NASA's official API</p>
+</footer>
+{% endblock %}
