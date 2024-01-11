@@ -10,7 +10,7 @@ Users can also add those pictures to their favorites list, and delete it from th
 
 
 
-                                                                                                      --------- Technologies ---------
+                    --------- Technologies ---------
 
 All back-end, server and routes are built using Python and Flask. 
 Registration and Authentication using Bcrypt, so all the passwords are being saved on Database using hashed format. 
