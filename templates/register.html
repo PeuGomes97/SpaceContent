@@ -7,10 +7,12 @@ Create User
 {% block content %}
 
 <div class="container">
-  <h1 class="text-center">Signup</h1>
+  <h1 class="text-center my-5">Signup</h1>
+  
+
   <form method="POST" class="mx-auto">
     {{ form.hidden_tag() }}
-
+    <div class="container">
     {% for field in form.errors %}
       <div class="alert alert-danger">{{ field }}:
         <ul>
@@ -20,39 +22,42 @@ Create User
         </ul>
       </div>
     {% endfor %}
+    </div>
 
-    <div class="container py-3 mb-4 ">
+
+    <div class="container col py-sm-3 mb-sm-4 ">
+  
       <div class="row mb-3">
-        <label for="username" class="col-sm-3 col-form-label text-end label-white">Username</label>
-        <div class="col-sm-6">
+        <label for="username" class="col-2 col-sm-3 col-form-label text-end label-white">Username</label>
+        <div class="col-8 d-10 col-sm-6 col-md-4">
           {{ form.username(class="form-control form-control-lg") }}
         </div>
       </div>
 
       <div class="row mb-3">
-        <label for="password" class="col-sm-3 col-form-label text-end label-white">Password</label>
-        <div class="col-sm-6">
+        <label for="password" class="col-2 col-sm-3 col-form-label text-end label-white">Password</label>
+        <div class="col-8 d-10 col-sm-6 col-md-4">
           {{ form.password(class="form-control form-control-lg") }}
         </div>
       </div>
 
       <div class="row mb-3">
-        <label for="email" class="col-sm-3 col-form-label text-end label-white">Email</label>
-        <div class="col-sm-6">
+        <label for="email" class="col-2 col-sm-3 col-form-label text-sm-end label-white">Email</label>
+        <div class="col-8 d-10 col-sm-6 col-md-4">
           {{ form.email(class="form-control form-control-lg") }}
         </div>
       </div>
 
       <div class="row mb-3">
-        <label for="first_name" class="col-sm-3 col-form-label text-end label-white">First Name</label>
-        <div class="col-sm-6">
+        <label for="first_name" class="col-2 col-sm-3 col-form-label text-sm-end label-white">First Name</label>
+        <div class="col-8 d-10 col-sm-6 col-md-4">
           {{ form.first_name(class="form-control form-control-lg") }}
         </div>
       </div>
 
       <div class="row mb-3">
-        <label for="last_name" class="col-sm-3 col-form-label text-end label-white">Last Name</label>
-        <div class="col-sm-6">
+        <label for="last_name" class="col-2 col-sm-3 col-form-label text-sm-end label-white">Last Name</label>
+        <div class="col-8 d-10 col-sm-6 col-md-4">
           {{ form.last_name(class="form-control form-control-lg") }}
         </div>
       </div>

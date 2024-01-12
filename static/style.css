@@ -8,50 +8,70 @@ body, html {
 /* style.css */
 
 body {
-    /* Defina as cores do gradiente ou use cores hexadecimais, lineares, etc. */
-    background: linear-gradient(120deg, #37363f, rgb(76, 58, 108));
-    /* Defina outras propriedades de fundo conforme necessário */
+    /* Set gradient colors or use hexadecimal, linear colors, etc. */
+    /* background: linear-gradient(120deg, #37363f, rgb(76, 58, 108)); */
+    /* Set other background properties as needed */
     /* background-size:  100vw 100vh; */
     background-image: url("https://wallpapers.com/images/hd/planet-mars-amoled-photo-tc5a1gjk2ur9kutv.webp");
-    background-size: cover; /* Ou background-size: 100%; */
-    background-repeat: no-repeat
-    /* Importante! Impedir a repetição do gradiente */
+    background-size: cover; /* Or background-size: 100%; */
+    background-repeat: no-repeat;
+    background-color: black;
+    /* Important! Prevent gradient repetition */
     /* background-repeat: initial; */
     /* min-height: 100vh; */
 }
 
 h1 {
-color: aliceblue;
+    color: aliceblue;
+}
+
+@media only screen and (max-width: 600px) {
+  .count{
+    width: 900;
+  }
+  div {
+    text-align: left;
+    font-family: 'Courier New', Courier, monospace;
+  }
 
 }
 
+
+
+.w-100 {
+ width: 100px;
+}
+
 .max-height-500 {
-    max-height: 700px; /* Define a altura máxima das imagens em 500 pixels */
-    width: auto; /* Mantém a largura proporcional à altura definida */
-    object-fit: contain; /* Ajusta a imagem ao contêiner, mantendo sua proporção */
+    max-height: 700px; /* Defines maximum image height at 500 pixels */
+    width: auto; /* Maintains width proportional to the defined height */
+    object-fit: contain; /* Fits the image to the container while maintaining its ratio */
 }
 
 
 .img-marsrover {
-    max-width: 50%; /* Redimensiona a imagem para se ajustar à largura máxima da div */
-    height: auto; /* Mantém a proporção da imagem */
-    display: block; /* Remove espaço extra abaixo da imagem */
+    max-width: 50%; /* Resizes the image to fit the div's maximum width */
+    height: auto; /* Maintains image proportion */
+    display: block; /* Removes extra space below the image */
 }
 
-/* Seu arquivo CSS */
+/* Your CSS file */
 .label-white {
-    color: white; /* Define a cor do texto como branco */
+    color: white; /* Sets text color to white */
 }
 
 
 .content-over-image {
     position: relative;
-    z-index: 1; /* Para garantir que o conteúdo fique acima da imagem de fundo */
-    padding-top: 50px; /* Ajuste o espaçamento do topo conforme necessário */
+    z-index: 1; /* To ensure content stays above the background image */
+    padding-top: 50px; /* Adjust top spacing as needed */
 }
 
 .custom-font-style {
-    font-size: 24px; /* Ajuste o tamanho da fonte conforme necessário */
-    font-weight: bold; /* Ajuste a espessura da fonte conforme necessário */
+    font-size: 24px; /* Adjust font size as needed */
+    font-weight: bold; /* Adjust font thickness as needed */
 }
 
+#count{
+    width: 60px;
+}

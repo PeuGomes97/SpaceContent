@@ -14,7 +14,6 @@ MARSROVER_API_URL = "https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/ph
 app = Flask(__name__)
 
 load_dotenv(find_dotenv())
-print(os.getenv('SECRET_KEY'))
 
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql:///nasausers"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -47,6 +46,11 @@ def register():
         first_name = form.first_name.data
         last_name = form.last_name.data
         email = form.email.data
+# Checks if username is already taken
+        existing_user = User.query.filter_by(username=username).first()
+        if existing_user:
+            flash('Username already exists. Please choose a different one.', 'danger')
+            return render_template("register.html", form=form)
 # Add it to DB
         user = User.register(username, password, first_name, last_name, email)
 
@@ -235,9 +239,6 @@ def list_favorites(user_id):
   
 
     return render_template("favorites.html", favorite_images=favorite_images, favorite_ids=favorite_ids)
-
-
-
 
 
 @app.route("/users/<int:user_id>/favorites/<int:favorite_id>", methods=['DELETE'])

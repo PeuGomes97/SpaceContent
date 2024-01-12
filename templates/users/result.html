@@ -33,9 +33,10 @@
         </div>
         <div class="col-auto">
             <button type="submit" class="btn btn-primary">Search</button>
+            <a href="{{ url_for('result_for_apod', user_id=session['user_id']) }}" class="btn btn-secondary">Clear Search</a>
         </div>     
     </div>
-    <a href="{{ url_for('result_for_apod', user_id=session['user_id']) }}" class="btn btn-secondary">Clear Search</a>
+    
 </form>
 
 

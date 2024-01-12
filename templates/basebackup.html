@@ -16,13 +16,13 @@
             <ul class="navbar-nav my-5">
                 <li class="nav-item">
                     {% if 'user_id' in session %}
-                        <div class="d-flex flex-column flex-lg-row">
+                        <div class="d-flex">
                             <a class="nav-link ml-3" href="{{ url_for('list_favorites', user_id=session['user_id']) }}">Favorites</a>
                             <a class="nav-link" href="/logout">Logout</a>
                         </div>
                     {% else %}
-                        <div class="d-flex flex-column flex-lg-row ">
-                        <a class="nav-link" href="/register">Sign up</a>
+                        <div class="d-flex">
+                        <a class="nav-link" href="/register">Register</a>
                         <a class="nav-link" href="/login">Login</a>
                     </div>
                     {% endif %}
@@ -31,7 +31,7 @@
         </div>
     </nav>
 
-    <div class="pb-5 background-image">
+    <div class="background-image">
         <div class="container mt-5 content-over-image">
             {% for category, msg in get_flashed_messages(with_categories=True) %}
                 <div class="alert alert-{{category}}">{{ msg }}</div>
