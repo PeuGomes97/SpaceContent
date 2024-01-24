@@ -232,7 +232,7 @@ def list_favorites(user_id):
 
     user = User.query.get_or_404(user_id)
     favorite_images = []
-    favorite_ids = []  # Lista para armazenar os IDs dos favoritos
+    favorite_ids = []  # List to store favorite's IDs
     if user.favorites:
         favorite_images = [fav.image_url for fav in user.favorites]
         favorite_ids = [fav.id for fav in user.favorites]  # Retrive favorite's id

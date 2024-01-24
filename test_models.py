@@ -11,7 +11,7 @@ class TestModels(unittest.TestCase):
         self.app = create_test_app()
         self.client = self.app.test_client()
 
-        # Contexto de aplicação para o banco de dados
+        # Application context for DB
         with self.app.app_context():
             db.create_all()
 
