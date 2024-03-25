@@ -23,13 +23,6 @@ app.config['SQLALCHEMY_ECHO'] = True
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
-if __name__ == '__main__':
-    # Use variáveis de ambiente para o host e a porta, se estiverem definidas, caso contrário, use valores padrão
-    host = os.getenv('HOST', '0.0.0.0')
-    port = int(os.getenv('PORT', 5000))
-    
-    # Inicie o aplicativo Flask
-    app.run(host=host, port=port)
 
 connect_db(app)
 
