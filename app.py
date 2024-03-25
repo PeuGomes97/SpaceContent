@@ -4,7 +4,6 @@ from models import connect_db, db, User, Bcrypt, SQLAlchemy, Favorite
 from forms import RegisterForm, LoginForm, SearchAPODForm, MarsRoverForm
 import requests
 import datetime
-from keys import API_KEY
 from dotenv import load_dotenv, find_dotenv
 import os
 
@@ -14,6 +13,9 @@ MARSROVER_API_URL = "https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/ph
 app = Flask(__name__)
 
 load_dotenv(find_dotenv())
+
+API_KEY = os.getenv('API_KEY')
+
 
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql:///nasausers"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
