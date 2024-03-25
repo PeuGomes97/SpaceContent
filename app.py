@@ -21,7 +21,12 @@ app.config['SQLALCHEMY_ECHO'] = True
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
+# Adicione o código para definir o host e a porta aqui
+host = os.getenv('HOST', '0.0.0.0')
+port = int(os.getenv('PORT', 5000))
+
 connect_db(app)
+
 
 @app.route("/")
 def homepage():
