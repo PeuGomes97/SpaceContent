@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}APOD{% endblock %}
+{% block title %} APOD{% endblock %}
 
 {% block content %}
 
@@ -32,7 +32,7 @@
             {{ form.end_date(id="end_date", class="form-control") }}
         </div>
         <div class="col-auto">
-            <button type="submit" class="btn btn-primary">Search</button>
+            <button type="submit" class="btn btn-primary" onclick="saveSearchValues()">Search</button>
             <a href="{{ url_for('result_for_apod', user_id=session['user_id']) }}" class="btn btn-secondary">Clear Search</a>
         </div>     
     </div>
@@ -152,6 +152,52 @@
         });
 
         return false;
+    }
+
+    // Function to save search values
+    function saveSearchValues() {
+        var countInput = document.getElementById('count');
+        var dateInput = document.getElementById('date');
+        var startDateInput = document.getElementById('start_date');
+        var endDateInput = document.getElementById('end_date');
+
+        localStorage.setItem('searchCount', countInput.value);
+        localStorage.setItem('searchDate', dateInput.value);
+        localStorage.setItem('searchStartDate', startDateInput.value);
+        localStorage.setItem('searchEndDate', endDateInput.value);
+    }
+
+    // Function to fill search fields with saved values
+    function fillSearchFields() {
+        var countInput = document.getElementById('count');
+        var dateInput = document.getElementById('date');
+        var startDateInput = document.getElementById('start_date');
+        var endDateInput = document.getElementById('end_date');
+
+        var savedCount = localStorage.getItem('searchCount');
+        var savedDate = localStorage.getItem('searchDate');
+        var savedStartDate = localStorage.getItem('searchStartDate');
+        var savedEndDate = localStorage.getItem('searchEndDate');
+
+        if (savedCount) {
+            countInput.value = savedCount;
+        }
+
+        if (savedDate) {
+            dateInput.value = savedDate;
+        }
+
+        if (savedStartDate) {
+            startDateInput.value = savedStartDate;
+        }
+
+        if (savedEndDate) {
+            endDateInput.value = savedEndDate;
+        }
+    }
+
+    window.onload = function() {
+        fillSearchFields();
     }
 </script>
 {% endblock %}

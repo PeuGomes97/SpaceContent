@@ -3,7 +3,6 @@ from werkzeug.exceptions import Unauthorized
 from models import connect_db, db, User, Bcrypt, SQLAlchemy, Favorite
 from forms import RegisterForm, LoginForm, SearchAPODForm, MarsRoverForm
 import requests
-import datetime
 from dotenv import load_dotenv, find_dotenv
 import os
 
@@ -17,7 +16,7 @@ load_dotenv(find_dotenv())
 API_KEY = os.getenv('API_KEY')
 
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DEV_DATABASE_URL")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')

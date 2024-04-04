@@ -1,8 +1,7 @@
 {% extends 'base.html' %}
-{% block title %}Mars Rover{% endblock %}
+{% block title %} Mars Rover{% endblock %}
 
 {% block content %}
-
 <form method="POST" class="mb-3">
     {{ form.hidden_tag() }}
     
@@ -25,17 +24,13 @@
             </select>
         </div>
         <div class="col-auto">
-            <button type="submit" class="btn btn-primary">Search</button>
+            <button type="submit" class="btn btn-primary" onclick="saveSearchValues()">Search</button>
         </div>
         <div class="col-auto">
             <a href="{{ url_for('mars_photos', user_id=session['user_id']) }}" class="btn btn-secondary">Clear Search</a>
         </div>
     </div>
 </form>
-
-
-
-
 
 <br>
 {% if images_info %}
@@ -103,7 +98,6 @@
 {% endif %}
 {% endif %}
 
-
 {% if message %}
 <spam class="label-white">
     {{ message }}
@@ -112,61 +106,88 @@
 </div>
 
 <script>
-function addToFavorites(event, imgSrc, index) {
-event.preventDefault();
+    function saveSearchValues() {
+        var dateInput = document.getElementById('date');
+        var cameraSelect = document.getElementById('cameras');
 
-var button = event.target.querySelector('button[type="submit"]');
-var successMessage;
-
-if (index === 'single') {
-    successMessage = document.getElementById('added-to-favorites-message-single');
-} else {
-    successMessage = event.target.querySelector(`#added-to-favorites-message-${index}`);
-}
-
-fetch(event.target.action, {
-    method: 'POST',
-    body: new FormData(event.target)
-}).then(response => {
-    if (response.ok) {
-        button.style.display = 'none';
-        successMessage.style.display = 'inline';
+        localStorage.setItem('searchDate', dateInput.value);
+        localStorage.setItem('searchCamera', cameraSelect.value);
     }
-}).catch(error => {
-    console.error('Erro:', error);
-});
 
-return false;
-}
+    function fillSearchFields() {
+        var dateInput = document.getElementById('date');
+        var cameraSelect = document.getElementById('cameras');
 
+        var savedDate = localStorage.getItem('searchDate');
+        var savedCamera = localStorage.getItem('searchCamera');
 
-    document.addEventListener('DOMContentLoaded', function() {
-        var myCarousel = document.getElementById('carouselExampleCaptions');
-        var carousel = new bootstrap.Carousel(myCarousel, {
-            interval: 7000, 
-        });
+        if (savedDate) {
+            dateInput.value = savedDate;
+        }
 
-        var prevButton = document.querySelector('.carousel-control-prev');
-        var nextButton = document.querySelector('.carousel-control-next');
+        if (savedCamera) {
+            cameraSelect.value = savedCamera;
+        }
+    }
 
-        prevButton.addEventListener('click', function() {
-            carousel.prev();
-        });
+    window.onload = function() {
+        fillSearchFields();
+    }
+</script>
 
-        nextButton.addEventListener('click', function() {
-            carousel.next();
-        });
+<script>
+function addToFavorites(event, imgSrc, index) {
+    event.preventDefault();
 
-        prevButton.onclick = function() {
-            carousel.prev();
-        };
+    var button = event.target.querySelector('button[type="submit"]');
+    var successMessage;
 
-        nextButton.onclick = function() {
-            carousel.next();
-        };
+    if (index === 'single') {
+        successMessage = document.getElementById('added-to-favorites-message-single');
+    } else {
+        successMessage = event.target.querySelector(`#added-to-favorites-message-${index}`);
+    }
+
+    fetch(event.target.action, {
+        method: 'POST',
+        body: new FormData(event.target)
+    }).then(response => {
+        if (response.ok) {
+            button.style.display = 'none';
+            successMessage.style.display = 'inline';
+        }
+    }).catch(error => {
+        console.error('Erro:', error);
     });
 
+    return false;
+}
 
+document.addEventListener('DOMContentLoaded', function() {
+    var myCarousel = document.getElementById('carouselExampleCaptions');
+    var carousel = new bootstrap.Carousel(myCarousel, {
+        interval: 7000, 
+    });
+
+    var prevButton = document.querySelector('.carousel-control-prev');
+    var nextButton = document.querySelector('.carousel-control-next');
+
+    prevButton.addEventListener('click', function() {
+        carousel.prev();
+    });
+
+    nextButton.addEventListener('click', function() {
+        carousel.next();
+    });
+
+    prevButton.onclick = function() {
+        carousel.prev();
+    };
+
+    nextButton.onclick = function() {
+        carousel.next();
+    };
+});
 </script>
 
 {% endblock %}
